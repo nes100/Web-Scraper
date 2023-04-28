@@ -6,9 +6,10 @@ URL = "https://programmer100.pythonanywhere.com/tours/"
 
 # Headers to use for HTTP request
 HEADERS = {
-'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) \ '
-														'Chrome/112.0.0.0 Safari/537.36'
+				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) \ '
+																		'Chrome/112.0.0.0 Safari/537.36'
 }
+
 
 def scrape(url):
 				"""Scrape the page source from the URL
@@ -20,6 +21,7 @@ def scrape(url):
 				source = response.text
 				return source
 
+
 def extract(source):
 				"""Extract structured data from the page source using a YAML file
 
@@ -30,10 +32,30 @@ def extract(source):
 				value = extractor.extract(source)["tours"]
 				return value
 
+
+def send_email():
+				print("Email was sent!")
+
+
+def store(extracted):
+				with open("data.txt", "a") as file:
+								file.write(extracted + "\n")
+
+
+def read(extracted):
+				with open("data.txt", "r") as file:
+								return file.read()
+
+
 if __name__ == "__main__":
 				# Scrape the web page
 				scraped = scrape(URL)
-
 				# Extract tour package data
 				extracted = extract(scraped)
 				print(extracted)
+				content = read(extracted)
+
+				if extracted != "No upcoming tours":
+								if extracted not in content:
+												store(extracted)
+												send_email()
