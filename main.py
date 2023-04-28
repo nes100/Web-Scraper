@@ -38,11 +38,16 @@ def send_email():
 
 
 def store(extracted):
+				"""Append extracted data to data.txt file
+
+				Input Arguments: str: extracted data
+				"""
 				with open("data.txt", "a") as file:
 								file.write(extracted + "\n")
 
 
 def read(extracted):
+				"""Read contents of file and return as string"""
 				with open("data.txt", "r") as file:
 								return file.read()
 
@@ -55,7 +60,9 @@ if __name__ == "__main__":
 				print(extracted)
 				content = read(extracted)
 
+				# Check for upcoming tours
 				if extracted != "No upcoming tours":
+								# Check that extracted data is not already in the file
 								if extracted not in content:
 												store(extracted)
 												send_email()
