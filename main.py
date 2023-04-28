@@ -1,5 +1,8 @@
 import requests
 import selectorlib
+import smtplib
+import ssl
+import os
 
 # URL to scrape
 URL = "https://programmer100.pythonanywhere.com/tours/"
@@ -33,8 +36,18 @@ def extract(source):
 				return value
 
 
-def send_email():
-				print("Email was sent!")
+def send_email(message):
+				host = "smtp.gmail.com"
+				port = 465
+				username = "anessuhonjic11@gmail.com"
+				password = os.getenv("PASSWORD")
+				receiver = "anessuhonjic11@gmail.com"
+				context = ssl.create_default_context()
+
+				with smtplib.SMTP_SSL(host, port, context=context) as server:
+								server.login(username, password)
+								server.sendmail(username, receiver, message)
+								print("Email was sent!")
 
 
 def store(extracted):
@@ -65,4 +78,4 @@ if __name__ == "__main__":
 								# Check that extracted data is not already in the file
 								if extracted not in content:
 												store(extracted)
-												send_email()
+												send_email(message="New Event Found!")
