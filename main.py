@@ -1,8 +1,8 @@
 import requests
 import selectorlib
-import smtplib
-import ssl
+import smtplib, ssl
 import os
+import time
 
 # URL to scrape
 URL = "https://programmer100.pythonanywhere.com/tours/"
@@ -66,16 +66,18 @@ def read(extracted):
 
 
 if __name__ == "__main__":
-				# Scrape the web page
-				scraped = scrape(URL)
-				# Extract tour package data
-				extracted = extract(scraped)
-				print(extracted)
-				content = read(extracted)
+				while True:
+								# Scrape the web page
+								scraped = scrape(URL)
+								# Extract tour package data
+								extracted = extract(scraped)
+								print(extracted)
+								content = read(extracted)
 
-				# Check for upcoming tours
-				if extracted != "No upcoming tours":
-								# Check that extracted data is not already in the file
-								if extracted not in content:
-												store(extracted)
-												send_email(message="New Event Found!")
+								# Check for upcoming tours
+								if extracted != "No upcoming tours":
+												# Check that extracted data is not already in the file
+												if extracted not in content:
+																store(extracted)
+																send_email(message="New Event Found!")
+								time.sleep(10)
